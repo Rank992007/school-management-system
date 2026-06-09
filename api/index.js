@@ -28,5 +28,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'School Management System API is running' });
 });
 
-// Export for Vercel
-module.exports = app;
+// Export for Vercel serverless function
+module.exports = (req, res) => {
+  app(req, res);
+};
+
