@@ -12,16 +12,6 @@ const StudentDashboard = ({ user, logout }) => {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
 
-  useEffect(() => {
-    if (activeView === 'marks') {
-      fetchMarks();
-    } else if (activeView === 'claims') {
-      fetchClaims();
-    } else if (activeView === 'bulletins') {
-      fetchBulletins();
-    }
-  }, [activeView, fetchMarks, fetchClaims, fetchBulletins]);
-
   const fetchMarks = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -81,6 +71,16 @@ const StudentDashboard = ({ user, logout }) => {
       setLoading(false);
     }
   }, [user.id]);
+
+  useEffect(() => {
+    if (activeView === 'marks') {
+      fetchMarks();
+    } else if (activeView === 'claims') {
+      fetchClaims();
+    } else if (activeView === 'bulletins') {
+      fetchBulletins();
+    }
+  }, [activeView, fetchMarks, fetchClaims, fetchBulletins]);
 
   const handleClaimSubmit = async (e) => {
     e.preventDefault();

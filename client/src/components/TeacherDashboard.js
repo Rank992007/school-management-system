@@ -12,20 +12,6 @@ const TeacherDashboard = ({ user, logout }) => {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
 
-  useEffect(() => {
-    if (activeView === 'students') {
-      fetchStudents();
-    } else if (activeView === 'marks') {
-      fetchAllMarks();
-    } else if (activeView === 'add-mark') {
-      fetchStudents();
-    } else if (activeView === 'claims') {
-      fetchAllClaims();
-    } else if (activeView === 'bulletins') {
-      fetchAllBulletins();
-    }
-  }, [activeView, fetchStudents, fetchAllMarks, fetchAllClaims, fetchAllBulletins]);
-
   const fetchStudents = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -106,6 +92,20 @@ const TeacherDashboard = ({ user, logout }) => {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (activeView === 'students') {
+      fetchStudents();
+    } else if (activeView === 'marks') {
+      fetchAllMarks();
+    } else if (activeView === 'add-mark') {
+      fetchStudents();
+    } else if (activeView === 'claims') {
+      fetchAllClaims();
+    } else if (activeView === 'bulletins') {
+      fetchAllBulletins();
+    }
+  }, [activeView, fetchStudents, fetchAllMarks, fetchAllClaims, fetchAllBulletins]);
 
   const handleMarkSubmit = async (e) => {
     e.preventDefault();
