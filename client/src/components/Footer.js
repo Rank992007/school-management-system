@@ -28,10 +28,10 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Follow Us</h3>
           <div className="social-links">
-            <a href="#" className="social-link"><i className='bx bxl-facebook'></i></a>
-            <a href="#" className="social-link"><i className='bx bxl-twitter'></i></a>
-            <a href="#" className="social-link"><i className='bx bxl-instagram'></i></a>
-            <a href="#" className="social-link"><i className='bx bxl-linkedin'></i></a>
+            <button className="social-link" aria-label="Facebook"><i className='bx bxl-facebook'></i></button>
+            <button className="social-link" aria-label="Twitter"><i className='bx bxl-twitter'></i></button>
+            <button className="social-link" aria-label="Instagram"><i className='bx bxl-instagram'></i></button>
+            <button className="social-link" aria-label="LinkedIn"><i className='bx bxl-linkedin'></i></button>
           </div>
         </div>
       </div>
