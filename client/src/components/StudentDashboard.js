@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const StudentDashboard = ({ user, logout }) => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -8,7 +7,6 @@ const StudentDashboard = ({ user, logout }) => {
   const [bulletins, setBulletins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const getAuthHeaders = () => ({
     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -22,9 +20,9 @@ const StudentDashboard = ({ user, logout }) => {
     } else if (activeView === 'bulletins') {
       fetchBulletins();
     }
-  }, [activeView]);
+  }, [activeView, fetchMarks, fetchClaims, fetchBulletins]);
 
-  const fetchMarks = async () => {
+  const fetchMarks = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -42,9 +40,9 @@ const StudentDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id]);
 
-  const fetchClaims = async () => {
+  const fetchClaims = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -62,9 +60,9 @@ const StudentDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id]);
 
-  const fetchBulletins = async () => {
+  const fetchBulletins = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -82,7 +80,7 @@ const StudentDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id]);
 
   const handleClaimSubmit = async (e) => {
     e.preventDefault();

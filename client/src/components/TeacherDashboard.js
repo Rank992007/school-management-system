@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const TeacherDashboard = ({ user, logout }) => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -8,7 +7,6 @@ const TeacherDashboard = ({ user, logout }) => {
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const getAuthHeaders = () => ({
     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -26,9 +24,9 @@ const TeacherDashboard = ({ user, logout }) => {
     } else if (activeView === 'bulletins') {
       fetchAllBulletins();
     }
-  }, [activeView]);
+  }, [activeView, fetchStudents, fetchAllMarks, fetchAllClaims, fetchAllBulletins]);
 
-  const fetchStudents = async () => {
+  const fetchStudents = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -46,9 +44,9 @@ const TeacherDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchAllMarks = async () => {
+  const fetchAllMarks = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -66,9 +64,9 @@ const TeacherDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchAllClaims = async () => {
+  const fetchAllClaims = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -86,9 +84,9 @@ const TeacherDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchAllBulletins = async () => {
+  const fetchAllBulletins = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -107,7 +105,7 @@ const TeacherDashboard = ({ user, logout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleMarkSubmit = async (e) => {
     e.preventDefault();
