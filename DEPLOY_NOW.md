@@ -2,7 +2,7 @@
 
 ## Your Environment Variables (Ready for Vercel)
 ```
-DATABASE_URL=postgresql://neondb_owner:npg_RXwDsTPjE73u@ep-divine-band-ap0i850w-pooler.c-7.us-east-1.aws.neon.tech/mms?sslmode=require&channel_binding=require
+DATABASE_URL=postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
 JWT_SECRET=81a48a36d2c8d9b627cd986a8027ae67
 NODE_ENV=production
 ```
@@ -36,7 +36,7 @@ Click "Environment Variables" and add these three:
 
 1. **DATABASE_URL**
    ```
-   postgresql://neondb_owner:npg_RXwDsTPjE73u@ep-divine-band-ap0i850w-pooler.c-7.us-east-1.aws.neon.tech/mms?sslmode=require&channel_binding=require
+   postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
    ```
 
 2. **JWT_SECRET**
