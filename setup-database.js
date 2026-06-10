@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('./config/database');
 
 async function setupDatabase() {
@@ -10,11 +11,14 @@ async function setupDatabase() {
     const schemaPath = path.join(__dirname, 'config', 'schema.sql');
     const schema = fs.readFileSync(schemaPath, 'utf8');
     
-    // Split the schema into individual statements
+    // Strip comment lines, then split the schema into individual statements
     const statements = schema
+      .split('\n')
+      .filter(line => !line.trim().startsWith('--'))
+      .join('\n')
       .split(';')
       .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+      .filter(stmt => stmt.length > 0);
     
     // Execute each statement
     for (const statement of statements) {
