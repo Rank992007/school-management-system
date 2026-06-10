@@ -3,7 +3,7 @@
 ## Your Environment Variables (Ready for Vercel)
 ```
 DATABASE_URL=postgresql://neondb_owner:npg_RXwDsTPjE73u@ep-divine-band-ap0i850w-pooler.c-7.us-east-1.aws.neon.tech/mms?sslmode=require&channel_binding=require
-JWT_SECRET=your_jwt_secret_key_here_change_in_production
+JWT_SECRET=81a48a36d2c8d9b627cd986a8027ae67
 NODE_ENV=production
 ```
 
@@ -41,7 +41,7 @@ Click "Environment Variables" and add these three:
 
 2. **JWT_SECRET**
    ```
-   your_jwt_secret_key_here_change_in_production
+   81a48a36d2c8d9b627cd986a8027ae67
    ```
 
 3. **NODE_ENV**
