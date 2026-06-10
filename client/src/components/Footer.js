@@ -21,7 +21,7 @@ const Footer = () => {
           <h3>Contact Info</h3>
           <ul>
             <li><i className='bx bx-envelope'></i> info@schoolmanagement.com</li>
-            <li><i className='bx bx-phone'></i> +1 (555) 123-4567</li>
+            <li><i className='bx bx-phone'></i> +250 794421597</li>
             <li><i className='bx bx-map'></i> 123 Education Street, Learning City</li>
           </ul>
         </div>
@@ -36,7 +36,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 School Management System. All rights reserved.</p>
+        <p>&copy; 2026 School Management System. All rights reserved.</p>
       </div>
     </footer>
   );
