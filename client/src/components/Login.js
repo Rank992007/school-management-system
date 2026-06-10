@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedRole, setSelectedRole] = useState('');
+  const [showVerification, setShowVerification] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -12,7 +14,8 @@ const Login = ({ setUser }) => {
     lastName: '',
     dateOfBirth: '',
     grade: '',
-    subject: ''
+    subject: '',
+    verificationCode: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,7 +35,7 @@ const Login = ({ setUser }) => {
 
     try {
       const url = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const payload = isLogin 
+      const payload = isLogin
         ? { username: formData.username, password: formData.password }
         : { ...formData, role: selectedRole };
 
@@ -47,9 +50,16 @@ const Login = ({ setUser }) => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        setUser(data.user);
-        navigate(`/${data.user.role}-dashboard`);
+        if (isLogin) {
+          localStorage.setItem('token', data.token);
+          setUser(data.user);
+          navigate(`/${data.user.role}-dashboard`);
+        } else {
+          // Registration successful, show verification screen
+          setShowVerification(true);
+          setRegisteredEmail(formData.email);
+          setError('');
+        }
       } else {
         setError(data.message || 'Something went wrong');
       }
@@ -59,6 +69,139 @@ const Login = ({ setUser }) => {
       setLoading(false);
     }
   };
+
+  const handleVerification = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code: formData.verificationCode })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        navigate(`/${data.user.role}-dashboard`);
+      } else {
+        setError(data.message || 'Invalid or expired verification code');
+      }
+    } catch (error) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: registeredEmail })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setError('');
+        alert('Verification code sent successfully. Please check your email.');
+      } else {
+        setError(data.message || 'Failed to resend verification code');
+      }
+    } catch (error) {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showVerification) {
+    return (
+      <div className="login-container">
+        <div className="login-card">
+          <h1 className="title">Verify Your Email</h1>
+          <p className="subtitle">Enter the 6-digit code sent to {registeredEmail}</p>
+
+          <form onSubmit={handleVerification}>
+            <div className="form-group">
+              <label>Verification Code</label>
+              <input
+                type="text"
+                name="verificationCode"
+                value={formData.verificationCode}
+                onChange={handleChange}
+                placeholder="Enter 6-digit code"
+                maxLength={6}
+                required
+                style={{
+                  textAlign: 'center',
+                  fontSize: '24px',
+                  letterSpacing: '8px',
+                  fontWeight: 'bold'
+                }}
+              />
+            </div>
+
+            {error && <div className="error-message">{error}</div>}
+
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? (
+                <div className="spinner"></div>
+              ) : (
+                'Verify Email'
+              )}
+            </button>
+
+            <button
+              type="button"
+              className="btn"
+              onClick={handleResendCode}
+              disabled={loading}
+              style={{
+                background: 'transparent',
+                color: '#667eea',
+                border: '2px solid #667eea',
+                marginTop: '1rem'
+              }}
+            >
+              {loading ? 'Sending...' : 'Resend Code'}
+            </button>
+
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                setShowVerification(false);
+                setSelectedRole('');
+                setError('');
+              }}
+              style={{
+                background: 'transparent',
+                color: '#666',
+                border: '2px solid #666',
+                marginTop: '0.5rem'
+              }}
+            >
+              Back to Registration
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (!isLogin && !selectedRole) {
     return (

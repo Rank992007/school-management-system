@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS users (
     date_of_birth DATE,
     grade VARCHAR(20),
     subject VARCHAR(50),
+    is_verified BOOLEAN DEFAULT FALSE,
+    verification_code VARCHAR(6),
+    verification_code_expires_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

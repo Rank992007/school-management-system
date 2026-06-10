@@ -77,6 +77,52 @@ class User {
   static async comparePassword(candidatePassword, hashedPassword) {
     return await bcrypt.compare(candidatePassword, hashedPassword);
   }
+
+  static async updateVerificationCode(userId, code, expiresAt) {
+    const query = `
+      UPDATE users
+      SET verification_code = $1, verification_code_expires_at = $2
+      WHERE id = $3
+      RETURNING id, email
+    `;
+    try {
+      const result = await db.query(query, [code, expiresAt, userId]);
+      return result.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async verifyEmail(code) {
+    const query = `
+      UPDATE users
+      SET is_verified = TRUE, verification_code = NULL, verification_code_expires_at = NULL
+      WHERE verification_code = $1
+        AND verification_code_expires_at > CURRENT_TIMESTAMP
+      RETURNING id, username, email, role, first_name, last_name
+    `;
+    try {
+      const result = await db.query(query, [code]);
+      return result.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async findByVerificationCode(code) {
+    const query = `
+      SELECT id, username, email, verification_code_expires_at
+      FROM users
+      WHERE verification_code = $1
+      AND verification_code_expires_at > CURRENT_TIMESTAMP
+    `;
+    try {
+      const result = await db.query(query, [code]);
+      return result.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = User;
