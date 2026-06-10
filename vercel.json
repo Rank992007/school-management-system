@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd client && npm install && npm run build",
+  "buildCommand": "npm install && npm run build",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -7,7 +7,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/client/build/index.html"
+      "destination": "/index.html"
     }
   ]
 }
