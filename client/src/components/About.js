@@ -91,7 +91,7 @@ const About = () => {
               <div className="member-avatar">
                 <i className='bx bx-user'></i>
               </div>
-              <h3></h3>
+              <h3>Emily Davis</h3>
               <p>Product Manager</p>
             </div>
           </div>
