@@ -216,6 +216,9 @@ const Login = ({ setUser }) => {
             <button className="btn" onClick={() => setSelectedRole('teacher')}>
               <i className='bx bx-chalkboard'></i> Register as Teacher
             </button>
+            <button className="btn" onClick={() => setSelectedRole('admin')}>
+              <i className='bx bx-shield'></i> Register as Admin
+            </button>
             <button className="btn" onClick={() => setIsLogin(true)}>
               <i className='bx bx-arrow-back'></i> Back to Login
             </button>
