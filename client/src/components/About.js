@@ -70,7 +70,7 @@ const About = () => {
               <div className="member-avatar">
                 <i className='bx bx-user'></i>
               </div>
-              <h3>John Smith</h3>
+              <h3>Rank_Intime</h3>
               <p>CEO & Founder</p>
             </div>
             <div className="team-member">
@@ -91,7 +91,7 @@ const About = () => {
               <div className="member-avatar">
                 <i className='bx bx-user'></i>
               </div>
-              <h3>Emily Davis</h3>
+              <h3></h3>
               <p>Product Manager</p>
             </div>
           </div>
