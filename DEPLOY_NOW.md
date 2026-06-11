@@ -5,6 +5,8 @@
 DATABASE_URL=postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
 JWT_SECRET=81a48a36d2c8d9b627cd986a8027ae67
 NODE_ENV=production
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
 ```
 
 ## Step-by-Step Vercel Deployment
@@ -32,7 +34,7 @@ Vercel will auto-detect most settings. Verify these:
 **Install Command**: `npm install`
 
 ### 5. Add Environment Variables
-Click "Environment Variables" and add these three:
+Click "Environment Variables" and add these five:
 
 1. **DATABASE_URL**
    ```
@@ -47,6 +49,16 @@ Click "Environment Variables" and add these three:
 3. **NODE_ENV**
    ```
    production
+   ```
+
+4. **EMAIL_USER**
+   ```
+   your_email@gmail.com
+   ```
+
+5. **EMAIL_PASSWORD**
+   ```
+   your_app_password
    ```
 
 ### 6. Deploy
