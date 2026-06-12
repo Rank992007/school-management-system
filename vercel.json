@@ -1,8 +1,8 @@
 {
-  "buildCommand": "npm install && cd client && npm install && npm run build",
+  "buildCommand": "npm install; cd client; npm install; npm run build",
   "outputDirectory": "client/build",
   "env": {
-    "DATABASE_URL": "postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require",
+    "DATABASE_URL": "postgresql://neondb_owner:npg_3KEyNeJkQ1vL@ep-divine-band-ap0i850w-pooler.c-7.us-east-1.aws.neon.tech/mms?sslmode=verify-full&channel_binding=require",
     "JWT_SECRET": "81a48a36d2c8d9b627cd986a8027ae67",
     "NODE_ENV": "production"
   },
