@@ -4,6 +4,7 @@ const Bulletin = require('../models/Bulletin');
 const Mark = require('../models/Mark');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { handleRouteError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -21,8 +22,7 @@ router.get('/student/:studentId', auth, async (req, res) => {
     
     res.json({ bulletins });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -112,8 +112,7 @@ router.post('/', [
 
     res.status(201).json({ message: 'Bulletin generated successfully', bulletin });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -135,8 +134,7 @@ router.get('/:bulletinId', auth, async (req, res) => {
 
     res.json({ bulletin });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 

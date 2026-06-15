@@ -12,6 +12,14 @@ const StudentDashboard = ({ user, logout }) => {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
 
+  const safeJson = async (response) => {
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
   const fetchMarks = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -19,12 +27,12 @@ const StudentDashboard = ({ user, logout }) => {
       const response = await fetch(`/api/marks/student/${user.id}`, {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setMarks(data.marks);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch marks (${response.status})`);
+        return;
       }
+      setMarks(data?.marks || []);
     } catch (error) {
       setError('Failed to fetch marks');
     } finally {
@@ -39,12 +47,12 @@ const StudentDashboard = ({ user, logout }) => {
       const response = await fetch(`/api/claims/student/${user.id}`, {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setClaims(data.claims);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch claims (${response.status})`);
+        return;
       }
+      setClaims(data?.claims || []);
     } catch (error) {
       setError('Failed to fetch claims');
     } finally {
@@ -59,12 +67,12 @@ const StudentDashboard = ({ user, logout }) => {
       const response = await fetch(`/api/bulletins/student/${user.id}`, {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setBulletins(data.bulletins);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch bulletins (${response.status})`);
+        return;
       }
+      setBulletins(data?.bulletins || []);
     } catch (error) {
       setError('Failed to fetch bulletins');
     } finally {
@@ -100,13 +108,13 @@ const StudentDashboard = ({ user, logout }) => {
         },
         body: JSON.stringify(claimData)
       });
-      const data = await response.json();
+      const data = await safeJson(response);
       if (response.ok) {
         alert('Claim submitted successfully');
         e.target.reset();
         fetchClaims();
       } else {
-        setError(data.message);
+        setError(data?.message || `Failed to submit claim (${response.status})`);
       }
     } catch (error) {
       setError('Failed to submit claim');

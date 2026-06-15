@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Claim = require('../models/Claim');
 const Mark = require('../models/Mark');
 const auth = require('../middleware/auth');
+const { handleRouteError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -20,8 +21,7 @@ router.get('/student/:studentId', auth, async (req, res) => {
     
     res.json({ claims });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -36,8 +36,7 @@ router.get('/', auth, async (req, res) => {
     
     res.json({ claims });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -75,8 +74,7 @@ router.post('/', [
 
     res.status(201).json({ message: 'Claim submitted successfully', claim });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -108,8 +106,7 @@ router.put('/:claimId/review', [
 
     res.json({ message: `Claim ${status} successfully`, claim: updatedClaim });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 

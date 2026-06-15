@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { handleRouteError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -14,8 +15,7 @@ router.get('/', auth, async (req, res) => {
     const students = await User.findAll('student');
     res.json({ students });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -36,8 +36,7 @@ router.get('/:studentId', auth, async (req, res) => {
 
     res.json({ student });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 

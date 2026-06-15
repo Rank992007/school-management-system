@@ -17,15 +17,20 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Verify token with backend
       fetch('/api/auth/me', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          localStorage.removeItem('token');
+          return null;
+        }
+        return response.json();
+      })
       .then(data => {
-        if (data.user) {
+        if (data && data.user) {
           setUser(data.user);
         }
       })

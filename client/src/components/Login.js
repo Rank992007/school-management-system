@@ -47,7 +47,13 @@ const Login = ({ setUser }) => {
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        setError('Unexpected server response. Please try again.');
+        return;
+      }
 
       if (response.ok) {
         if (isLogin) {
@@ -55,7 +61,6 @@ const Login = ({ setUser }) => {
           setUser(data.user);
           navigate(`/${data.user.role}-dashboard`);
         } else {
-          // Registration successful, show verification screen
           setShowVerification(true);
           setRegisteredEmail(formData.email);
           setError('');
@@ -84,7 +89,13 @@ const Login = ({ setUser }) => {
         body: JSON.stringify({ code: formData.verificationCode })
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        setError('Unexpected server response. Please try again.');
+        return;
+      }
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
@@ -113,7 +124,13 @@ const Login = ({ setUser }) => {
         body: JSON.stringify({ email: registeredEmail })
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        setError('Unexpected server response. Please try again.');
+        return;
+      }
 
       if (response.ok) {
         setError('');
