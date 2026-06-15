@@ -8,7 +8,9 @@
     "dev": "nodemon server.js",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "vercel-build": "npm install --prefix client && npm run build --prefix client"
+    "vercel-build": "npm install --prefix client && npm run build --prefix client",
+    "test": "jest --forceExit --detectOpenHandles",
+    "test:coverage": "jest --forceExit --detectOpenHandles --coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,7 +23,9 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "jest": "^30.4.2",
+    "nodemon": "^3.0.1",
+    "supertest": "^7.2.2"
   },
   "keywords": [
     "school",
@@ -31,5 +35,11 @@
     "express"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "__tests__/helpers/"
+    ]
+  }
 }
