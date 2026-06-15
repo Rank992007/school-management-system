@@ -1,11 +1,6 @@
 {
   "buildCommand": "npm install; cd client; npm install; npm run build",
   "outputDirectory": "client/build",
-  "env": {
-    "DATABASE_URL": "@database-url",
-    "JWT_SECRET": "@jwt-secret",
-    "NODE_ENV": "production"
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
