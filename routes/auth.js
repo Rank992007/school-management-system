@@ -12,7 +12,7 @@ router.post('/register', [
   body('username').trim().isLength({ min: 3 }).withMessage('Username must be at least 3 characters'),
   body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  body('role').isIn(['student', 'teacher', 'admin']).withMessage('Invalid role'),
+  body('role').isIn(['student', 'teacher']).withMessage('Invalid role'),
   body('firstName').trim().notEmpty().withMessage('First name is required'),
   body('lastName').trim().notEmpty().withMessage('Last name is required')
 ], async (req, res) => {
@@ -93,6 +93,11 @@ router.post('/login', [
     const isMatch = await User.comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Check email verification
+    if (!user.is_verified) {
+      return res.status(403).json({ message: 'Please verify your email before logging in' });
     }
 
     // Generate JWT token

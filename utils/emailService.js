@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // Create email transporter
 const transporter = nodemailer.createTransport({
@@ -9,9 +10,9 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Generate random 6-digit verification code
+// Generate cryptographically secure 6-digit verification code
 const generateVerificationCode = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return crypto.randomInt(100000, 999999).toString();
 };
 
 // Send verification code via email

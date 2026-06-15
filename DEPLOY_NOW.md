@@ -1,13 +1,18 @@
 # 🚀 DEPLOY NOW - Complete Instructions
 
 ## Your Environment Variables (Ready for Vercel)
+
+Set these as Vercel environment variables (do **not** commit them to the repo):
+
 ```
-DATABASE_URL=postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
-JWT_SECRET=81a48a36d2c8d9b627cd986a8027ae67
+DATABASE_URL=<your-neon-db-connection-string>
+JWT_SECRET=<generate-a-strong-random-secret>
 NODE_ENV=production
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password
+EMAIL_USER=<your-email@gmail.com>
+EMAIL_PASSWORD=<your-app-password>
 ```
+
+> **Tip:** Generate a strong JWT secret with: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
 
 ## Step-by-Step Vercel Deployment
 
@@ -36,30 +41,11 @@ Vercel will auto-detect most settings. Verify these:
 ### 5. Add Environment Variables
 Click "Environment Variables" and add these five:
 
-1. **DATABASE_URL**
-   ```
-   postgresql://neondb_owner:npg_Avr9RQfbJ2dX@ep-summer-sun-ajbnpk2z-pooler.c-3.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
-   ```
-
-2. **JWT_SECRET**
-   ```
-   81a48a36d2c8d9b627cd986a8027ae67
-   ```
-
-3. **NODE_ENV**
-   ```
-   production
-   ```
-
-4. **EMAIL_USER**
-   ```
-   your_email@gmail.com
-   ```
-
-5. **EMAIL_PASSWORD**
-   ```
-   your_app_password
-   ```
+1. **DATABASE_URL** — Your Neon DB PostgreSQL connection string
+2. **JWT_SECRET** — A strong random secret (use the command above to generate one)
+3. **NODE_ENV** — `production`
+4. **EMAIL_USER** — Your Gmail address for sending verification emails
+5. **EMAIL_PASSWORD** — Your Gmail app password (not your regular password)
 
 ### 6. Deploy
 - Click "Deploy" button
@@ -67,10 +53,7 @@ Click "Environment Variables" and add these five:
 - You'll see a green checkmark when done
 
 ### 7. Your Live App
-Your application will be available at:
-```
-https://school-management-system-rank992007.vercel.app
-```
+Your application will be available at your Vercel-assigned URL.
 
 ## After Deployment
 

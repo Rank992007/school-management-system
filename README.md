@@ -58,10 +58,11 @@ A complete full-stack school management system built with Node.js/Express backen
    ```
    PORT=5000
    DATABASE_URL=postgresql://username:password@host:5432/database_name?sslmode=require
-   JWT_SECRET=your_jwt_secret_key_here_change_in_production
+   JWT_SECRET=<run: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))">
    NODE_ENV=development
+   CLIENT_URL=http://localhost:3000
    ```
-   Replace `DATABASE_URL` with your Neon DB connection string.
+   Replace `DATABASE_URL` with your Neon DB connection string and generate a strong `JWT_SECRET`.
 
 5. Set up the database schema:
    ```bash
