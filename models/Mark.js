@@ -11,13 +11,8 @@ class Mark {
     `;
     
     const values = [studentId, teacherId, subject, testType, score, maxScore || 100, semester, academicYear, comments];
-    
-    try {
-      const result = await db.query(query, values);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, values);
+    return result.rows[0];
   }
 
   static async findByStudentId(studentId) {
@@ -29,12 +24,8 @@ class Mark {
       ORDER BY m.date DESC
     `;
     
-    try {
-      const result = await db.query(query, [studentId]);
-      return result.rows;
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [studentId]);
+    return result.rows;
   }
 
   static async findAll() {
@@ -48,12 +39,8 @@ class Mark {
       ORDER BY m.date DESC
     `;
     
-    try {
-      const result = await db.query(query);
-      return result.rows;
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query);
+    return result.rows;
   }
 
   static async findById(id) {
@@ -67,12 +54,8 @@ class Mark {
       WHERE m.id = $1
     `;
     
-    try {
-      const result = await db.query(query, [id]);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [id]);
+    return result.rows[0];
   }
 
   static async update(id, updateData) {
@@ -86,24 +69,14 @@ class Mark {
     `;
     
     const values = [score, comments, id];
-    
-    try {
-      const result = await db.query(query, values);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, values);
+    return result.rows[0];
   }
 
   static async delete(id) {
     const query = 'DELETE FROM marks WHERE id = $1 RETURNING *';
-    
-    try {
-      const result = await db.query(query, [id]);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [id]);
+    return result.rows[0];
   }
 }
 
