@@ -8,6 +8,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import StudentDashboard from './components/StudentDashboard';
 import TeacherDashboard from './components/TeacherDashboard';
+import { getAuthHeaders } from './utils/api';
 import './App.css';
 
 function App() {
@@ -17,11 +18,8 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Verify token with backend
       fetch('/api/auth/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: getAuthHeaders()
       })
       .then(response => response.json())
       .then(data => {

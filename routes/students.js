@@ -1,44 +1,27 @@
 const express = require('express');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { authorize, authorizeOwnerOrRoles } = require('../middleware/authorize');
+const asyncHandler = require('../utils/asyncHandler');
 
 const router = express.Router();
 
-// Get all students (teacher/admin only)
-router.get('/', auth, async (req, res) => {
-  try {
-    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Unauthorized' });
-    }
+const canViewStudentData = authorizeOwnerOrRoles('teacher', 'admin');
 
-    const students = await User.findAll('student');
-    res.json({ students });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+// Get all students (teacher/admin only)
+router.get('/', auth, authorize('teacher', 'admin'), asyncHandler(async (req, res) => {
+  const students = await User.findAll('student');
+  res.json({ students });
+}));
 
 // Get specific student
-router.get('/:studentId', auth, async (req, res) => {
-  try {
-    const { studentId } = req.params;
-
-    // Check if user is authorized to view this student
-    if (req.user.role !== 'teacher' && req.user.role !== 'admin' && req.user.userId !== parseInt(studentId)) {
-      return res.status(403).json({ message: 'Unauthorized' });
-    }
-
-    const student = await User.findById(studentId);
-    if (!student || student.role !== 'student') {
-      return res.status(404).json({ message: 'Student not found' });
-    }
-
-    res.json({ student });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+router.get('/:studentId', auth, canViewStudentData('studentId'), asyncHandler(async (req, res) => {
+  const student = await User.findById(req.params.studentId);
+  if (!student || student.role !== 'student') {
+    return res.status(404).json({ message: 'Student not found' });
   }
-});
+
+  res.json({ student });
+}));
 
 module.exports = router;

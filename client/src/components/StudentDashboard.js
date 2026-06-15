@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { apiGet, apiPost } from '../utils/api';
+import LoadingState from './shared/LoadingState';
 
 const StudentDashboard = ({ user, logout }) => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -8,25 +10,14 @@ const StudentDashboard = ({ user, logout }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const getAuthHeaders = () => ({
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  });
-
   const fetchMarks = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`/api/marks/student/${user.id}`, {
-        headers: getAuthHeaders()
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMarks(data.marks);
-      } else {
-        setError(data.message);
-      }
+      const data = await apiGet(`/api/marks/student/${user.id}`);
+      setMarks(data.marks);
     } catch (error) {
-      setError('Failed to fetch marks');
+      setError(error.message || 'Failed to fetch marks');
     } finally {
       setLoading(false);
     }
@@ -36,17 +27,10 @@ const StudentDashboard = ({ user, logout }) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`/api/claims/student/${user.id}`, {
-        headers: getAuthHeaders()
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setClaims(data.claims);
-      } else {
-        setError(data.message);
-      }
+      const data = await apiGet(`/api/claims/student/${user.id}`);
+      setClaims(data.claims);
     } catch (error) {
-      setError('Failed to fetch claims');
+      setError(error.message || 'Failed to fetch claims');
     } finally {
       setLoading(false);
     }
@@ -56,17 +40,10 @@ const StudentDashboard = ({ user, logout }) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`/api/bulletins/student/${user.id}`, {
-        headers: getAuthHeaders()
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setBulletins(data.bulletins);
-      } else {
-        setError(data.message);
-      }
+      const data = await apiGet(`/api/bulletins/student/${user.id}`);
+      setBulletins(data.bulletins);
     } catch (error) {
-      setError('Failed to fetch bulletins');
+      setError(error.message || 'Failed to fetch bulletins');
     } finally {
       setLoading(false);
     }
@@ -92,24 +69,12 @@ const StudentDashboard = ({ user, logout }) => {
     };
 
     try {
-      const response = await fetch('/api/claims', {
-        method: 'POST',
-        headers: {
-          ...getAuthHeaders(),
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(claimData)
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert('Claim submitted successfully');
-        e.target.reset();
-        fetchClaims();
-      } else {
-        setError(data.message);
-      }
+      await apiPost('/api/claims', claimData);
+      alert('Claim submitted successfully');
+      e.target.reset();
+      fetchClaims();
     } catch (error) {
-      setError('Failed to submit claim');
+      setError(error.message || 'Failed to submit claim');
     }
   };
 
@@ -136,15 +101,7 @@ const StudentDashboard = ({ user, logout }) => {
   const renderMarks = () => (
     <div className="table-container">
       <h2>Your Marks</h2>
-      {loading ? (
-        <div className="loading">
-          <div className="spinner"></div>
-        </div>
-      ) : error ? (
-        <div className="error-message">{error}</div>
-      ) : marks.length === 0 ? (
-        <p>No marks available</p>
-      ) : (
+      <LoadingState loading={loading} error={error} isEmpty={marks.length === 0} emptyMessage="No marks available">
         <table>
           <thead>
             <tr>
@@ -171,7 +128,7 @@ const StudentDashboard = ({ user, logout }) => {
             ))}
           </tbody>
         </table>
-      )}
+      </LoadingState>
       <button className="btn" onClick={() => setActiveView('dashboard')} style={{ marginTop: '1rem' }}>
         Back to Dashboard
       </button>
@@ -207,15 +164,7 @@ const StudentDashboard = ({ user, logout }) => {
       </form>
 
       <h3>Your Claims</h3>
-      {loading ? (
-        <div className="loading">
-          <div className="spinner"></div>
-        </div>
-      ) : error ? (
-        <div className="error-message">{error}</div>
-      ) : claims.length === 0 ? (
-        <p>No claims submitted</p>
-      ) : (
+      <LoadingState loading={loading} error={error} isEmpty={claims.length === 0} emptyMessage="No claims submitted">
         <table>
           <thead>
             <tr>
@@ -242,7 +191,7 @@ const StudentDashboard = ({ user, logout }) => {
             ))}
           </tbody>
         </table>
-      )}
+      </LoadingState>
       <button className="btn" onClick={() => setActiveView('dashboard')} style={{ marginTop: '1rem' }}>
         Back to Dashboard
       </button>
@@ -252,16 +201,8 @@ const StudentDashboard = ({ user, logout }) => {
   const renderBulletins = () => (
     <div className="table-container">
       <h2>Your Bulletins</h2>
-      {loading ? (
-        <div className="loading">
-          <div className="spinner"></div>
-        </div>
-      ) : error ? (
-        <div className="error-message">{error}</div>
-      ) : bulletins.length === 0 ? (
-        <p>No bulletins available</p>
-      ) : (
-        bulletins.map(bulletin => (
+      <LoadingState loading={loading} error={error} isEmpty={bulletins.length === 0} emptyMessage="No bulletins available">
+        {bulletins.map(bulletin => (
           <div key={bulletin._id} style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #e1e1e1', borderRadius: '8px' }}>
             <h3>{bulletin.semester} - {bulletin.academicYear}</h3>
             <p><strong>Overall Average:</strong> {bulletin.overallAverage.toFixed(2)}%</p>
@@ -288,8 +229,8 @@ const StudentDashboard = ({ user, logout }) => {
               </tbody>
             </table>
           </div>
-        ))
-      )}
+        ))}
+      </LoadingState>
       <button className="btn" onClick={() => setActiveView('dashboard')} style={{ marginTop: '1rem' }}>
         Back to Dashboard
       </button>

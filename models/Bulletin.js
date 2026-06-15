@@ -5,10 +5,8 @@ class Bulletin {
     const { studentId, semester, academicYear, subjects, overallAverage, grade, attendance, generatedBy } = bulletinData;
     
     try {
-      // Start transaction
       await db.query('BEGIN');
       
-      // Create bulletin
       const bulletinQuery = `
         INSERT INTO bulletins (student_id, semester, academic_year, overall_average, grade, total_days, present_days, attendance_percentage, generated_by)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -30,7 +28,6 @@ class Bulletin {
       const bulletinResult = await db.query(bulletinQuery, bulletinValues);
       const bulletin = bulletinResult.rows[0];
       
-      // Create bulletin subjects
       for (const subject of subjects) {
         const subjectQuery = `
           INSERT INTO bulletin_subjects (bulletin_id, subject_name, teacher_name, average_score)
@@ -42,7 +39,6 @@ class Bulletin {
         const subjectResult = await db.query(subjectQuery, subjectValues);
         const bulletinSubject = subjectResult.rows[0];
         
-        // Create bulletin marks for this subject
         for (const mark of subject.marks) {
           const markQuery = `
             INSERT INTO bulletin_marks (bulletin_subject_id, test_type, score, max_score, date)
@@ -63,7 +59,6 @@ class Bulletin {
       
       await db.query('COMMIT');
       
-      // Return the complete bulletin with all related data
       return await this.findById(bulletin.id);
     } catch (error) {
       await db.query('ROLLBACK');
@@ -83,19 +78,14 @@ class Bulletin {
       ORDER BY b.generated_at DESC
     `;
     
-    try {
-      const result = await db.query(query, [studentId]);
-      const bulletins = result.rows;
-      
-      // Get subjects and marks for each bulletin
-      for (const bulletin of bulletins) {
-        bulletin.subjects = await this.getBulletinSubjects(bulletin.id);
-      }
-      
-      return bulletins;
-    } catch (error) {
-      throw error;
+    const result = await db.query(query, [studentId]);
+    const bulletins = result.rows;
+    
+    for (const bulletin of bulletins) {
+      bulletin.subjects = await this.getBulletinSubjects(bulletin.id);
     }
+    
+    return bulletins;
   }
 
   static async findById(id) {
@@ -109,17 +99,13 @@ class Bulletin {
       WHERE b.id = $1
     `;
     
-    try {
-      const result = await db.query(query, [id]);
-      if (result.rows.length === 0) return null;
-      
-      const bulletin = result.rows[0];
-      bulletin.subjects = await this.getBulletinSubjects(bulletin.id);
-      
-      return bulletin;
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [id]);
+    if (result.rows.length === 0) return null;
+    
+    const bulletin = result.rows[0];
+    bulletin.subjects = await this.getBulletinSubjects(bulletin.id);
+    
+    return bulletin;
   }
 
   static async getBulletinSubjects(bulletinId) {
@@ -128,25 +114,20 @@ class Bulletin {
       WHERE bulletin_id = $1
     `;
     
-    try {
-      const subjectsResult = await db.query(subjectsQuery, [bulletinId]);
-      const subjects = subjectsResult.rows;
+    const subjectsResult = await db.query(subjectsQuery, [bulletinId]);
+    const subjects = subjectsResult.rows;
+    
+    for (const subject of subjects) {
+      const marksQuery = `
+        SELECT * FROM bulletin_marks
+        WHERE bulletin_subject_id = $1
+      `;
       
-      // Get marks for each subject
-      for (const subject of subjects) {
-        const marksQuery = `
-          SELECT * FROM bulletin_marks
-          WHERE bulletin_subject_id = $1
-        `;
-        
-        const marksResult = await db.query(marksQuery, [subject.id]);
-        subject.marks = marksResult.rows;
-      }
-      
-      return subjects;
-    } catch (error) {
-      throw error;
+      const marksResult = await db.query(marksQuery, [subject.id]);
+      subject.marks = marksResult.rows;
     }
+    
+    return subjects;
   }
 }
 

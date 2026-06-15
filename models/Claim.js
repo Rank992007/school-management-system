@@ -11,13 +11,8 @@ class Claim {
     `;
     
     const values = [studentId, markId, title, description];
-    
-    try {
-      const result = await db.query(query, values);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, values);
+    return result.rows[0];
   }
 
   static async findByStudentId(studentId) {
@@ -32,12 +27,8 @@ class Claim {
       ORDER BY c.submitted_at DESC
     `;
     
-    try {
-      const result = await db.query(query, [studentId]);
-      return result.rows;
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [studentId]);
+    return result.rows;
   }
 
   static async findAll() {
@@ -53,12 +44,8 @@ class Claim {
       ORDER BY c.submitted_at DESC
     `;
     
-    try {
-      const result = await db.query(query);
-      return result.rows;
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query);
+    return result.rows;
   }
 
   static async findById(id) {
@@ -74,12 +61,8 @@ class Claim {
       WHERE c.id = $1
     `;
     
-    try {
-      const result = await db.query(query, [id]);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, [id]);
+    return result.rows[0];
   }
 
   static async updateReview(id, status, reviewedBy, reviewComments) {
@@ -91,13 +74,8 @@ class Claim {
     `;
     
     const values = [status, reviewedBy, reviewComments, id];
-    
-    try {
-      const result = await db.query(query, values);
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+    const result = await db.query(query, values);
+    return result.rows[0];
   }
 }
 
