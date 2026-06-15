@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Login = ({ setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,6 +17,12 @@ const Login = ({ setUser }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const roleFromSidebar = searchParams.get('role');
+  const roleLabel = roleFromSidebar
+    ? roleFromSidebar.charAt(0).toUpperCase() + roleFromSidebar.slice(1)
+    : '';
 
   const handleChange = (e) => {
     setFormData({
@@ -53,7 +59,7 @@ const Login = ({ setUser }) => {
       } else {
         setError(data.message || 'Something went wrong');
       }
-    } catch (error) {
+    } catch (err) {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -73,6 +79,9 @@ const Login = ({ setUser }) => {
             <button className="btn" onClick={() => setSelectedRole('teacher')}>
               <i className='bx bx-chalkboard'></i> Register as Teacher
             </button>
+            <button className="btn" onClick={() => setSelectedRole('admin')}>
+              <i className='bx bx-shield-quarter'></i> Register as Admin
+            </button>
             <button className="btn" onClick={() => setIsLogin(true)}>
               <i className='bx bx-arrow-back'></i> Back to Login
             </button>
@@ -86,7 +95,9 @@ const Login = ({ setUser }) => {
     <div className="login-container">
       <div className="login-card">
         <h1 className="title">
-          {isLogin ? 'Login' : `Register as ${selectedRole}`}
+          {isLogin
+            ? (roleLabel ? `Login as ${roleLabel}` : 'Login')
+            : `Register as ${selectedRole}`}
         </h1>
         
         <form onSubmit={handleSubmit}>

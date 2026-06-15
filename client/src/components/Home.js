@@ -6,7 +6,7 @@ const Home = ({ user }) => {
     <div className="home-page">
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Welcome to School Management System</h1>
+          <h1>Welcome to Our Website</h1>
           <p>A comprehensive platform for managing educational institutions, students, teachers, and academic records.</p>
           <div className="hero-buttons">
             {!user ? (
