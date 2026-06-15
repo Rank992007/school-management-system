@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const db = require('../config/database');
 
 dotenv.config();
 
@@ -28,6 +27,16 @@ app.get('/', (req, res) => {
   res.json({ message: 'School Management System API is running' });
 });
 
+// 404 handler for unmatched routes
+app.use((req, res) => {
+  res.status(404).json({ message: `Route ${req.method} ${req.originalUrl} not found` });
+});
+
+// Global error handler
+app.use((err, req, res, _next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Internal server error' });
+});
+
 // Export for Vercel serverless function
 module.exports = app;
-

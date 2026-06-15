@@ -12,6 +12,14 @@ const TeacherDashboard = ({ user, logout }) => {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
 
+  const safeJson = async (response) => {
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
   const fetchStudents = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -19,12 +27,12 @@ const TeacherDashboard = ({ user, logout }) => {
       const response = await fetch('/api/students', {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setStudents(data.students);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch students (${response.status})`);
+        return;
       }
+      setStudents(data?.students || []);
     } catch (error) {
       setError('Failed to fetch students');
     } finally {
@@ -39,12 +47,12 @@ const TeacherDashboard = ({ user, logout }) => {
       const response = await fetch('/api/marks/all', {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setMarks(data.marks);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch marks (${response.status})`);
+        return;
       }
+      setMarks(data?.marks || []);
     } catch (error) {
       setError('Failed to fetch marks');
     } finally {
@@ -59,12 +67,12 @@ const TeacherDashboard = ({ user, logout }) => {
       const response = await fetch('/api/claims', {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        setClaims(data.claims);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch claims (${response.status})`);
+        return;
       }
+      setClaims(data?.claims || []);
     } catch (error) {
       setError('Failed to fetch claims');
     } finally {
@@ -79,13 +87,12 @@ const TeacherDashboard = ({ user, logout }) => {
       const response = await fetch('/api/bulletins/all', {
         headers: getAuthHeaders()
       });
-      const data = await response.json();
-      if (response.ok) {
-        // This would need to be implemented in the backend
-        console.log('Bulletins:', data);
-      } else {
-        setError(data.message);
+      const data = await safeJson(response);
+      if (!response.ok) {
+        setError(data?.message || `Failed to fetch bulletins (${response.status})`);
+        return;
       }
+      console.log('Bulletins:', data);
     } catch (error) {
       setError('Failed to fetch bulletins');
     } finally {
@@ -130,13 +137,13 @@ const TeacherDashboard = ({ user, logout }) => {
         },
         body: JSON.stringify(markData)
       });
-      const data = await response.json();
+      const data = await safeJson(response);
       if (response.ok) {
         alert('Mark added successfully');
         e.target.reset();
         setActiveView('marks');
       } else {
-        setError(data.message);
+        setError(data?.message || `Failed to add mark (${response.status})`);
       }
     } catch (error) {
       setError('Failed to add mark');
@@ -153,12 +160,12 @@ const TeacherDashboard = ({ user, logout }) => {
         },
         body: JSON.stringify({ status, reviewComments })
       });
-      const data = await response.json();
+      const data = await safeJson(response);
       if (response.ok) {
         alert(`Claim ${status} successfully`);
         fetchAllClaims();
       } else {
-        setError(data.message);
+        setError(data?.message || `Failed to review claim (${response.status})`);
       }
     } catch (error) {
       setError('Failed to review claim');
@@ -183,12 +190,12 @@ const TeacherDashboard = ({ user, logout }) => {
         },
         body: JSON.stringify(bulletinData)
       });
-      const data = await response.json();
+      const data = await safeJson(response);
       if (response.ok) {
         alert('Bulletin generated successfully');
         e.target.reset();
       } else {
-        setError(data.message);
+        setError(data?.message || `Failed to generate bulletin (${response.status})`);
       }
     } catch (error) {
       setError('Failed to generate bulletin');

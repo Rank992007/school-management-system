@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Mark = require('../models/Mark');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { handleRouteError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -19,8 +20,7 @@ router.get('/student/:studentId', auth, async (req, res) => {
     const marks = await Mark.findByStudentId(studentId);
     res.json({ marks });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -66,8 +66,7 @@ router.post('/', [
 
     res.status(201).json({ message: 'Mark added successfully', mark });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -102,8 +101,7 @@ router.put('/:markId', [
     const updatedMark = await Mark.update(markId, { score: parseInt(score), comments });
     res.json({ message: 'Mark updated successfully', mark: updatedMark });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -129,8 +127,7 @@ router.delete('/:markId', auth, async (req, res) => {
     await Mark.delete(markId);
     res.json({ message: 'Mark deleted successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 

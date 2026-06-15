@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 const { generateVerificationCode, sendVerificationCode } = require('../utils/emailService');
+const { handleRouteError } = require('../utils/errorHandler');
 
 const router = express.Router();
 
@@ -53,10 +54,11 @@ router.post('/register', [
     await User.updateVerificationCode(user.id, verificationCode, expiresAt);
 
     // Send verification email
-    const emailSent = await sendVerificationCode(email, verificationCode);
-    
-    if (!emailSent) {
-      return res.status(500).json({ message: 'Failed to send verification email' });
+    try {
+      await sendVerificationCode(email, verificationCode);
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError.message);
+      return res.status(500).json({ message: 'Account created but failed to send verification email. Please use resend verification.' });
     }
 
     res.status(201).json({
@@ -65,8 +67,7 @@ router.post('/register', [
       email: user.email
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -115,8 +116,7 @@ router.post('/login', [
       }
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -129,8 +129,7 @@ router.get('/me', auth, async (req, res) => {
     }
     res.json({ user });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -173,8 +172,7 @@ router.post('/verify', [
       }
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 
@@ -208,9 +206,10 @@ router.post('/resend-verification', [
     await User.updateVerificationCode(user.id, verificationCode, expiresAt);
 
     // Send verification email
-    const emailSent = await sendVerificationCode(email, verificationCode);
-    
-    if (!emailSent) {
+    try {
+      await sendVerificationCode(email, verificationCode);
+    } catch (emailError) {
+      console.error('Failed to send verification email:', emailError.message);
       return res.status(500).json({ message: 'Failed to send verification email' });
     }
 
@@ -218,8 +217,7 @@ router.post('/resend-verification', [
       message: 'Verification code sent successfully. Please check your email.'
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    handleRouteError(res, error);
   }
 });
 

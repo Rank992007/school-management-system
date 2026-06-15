@@ -66,7 +66,11 @@ class Bulletin {
       // Return the complete bulletin with all related data
       return await this.findById(bulletin.id);
     } catch (error) {
-      await db.query('ROLLBACK');
+      try {
+        await db.query('ROLLBACK');
+      } catch (rollbackError) {
+        console.error('ROLLBACK failed:', rollbackError.message);
+      }
       throw error;
     }
   }

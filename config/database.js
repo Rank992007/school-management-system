@@ -5,6 +5,10 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
+pool.on('error', (err) => {
+  console.error('Unexpected PostgreSQL pool error:', err.message);
+});
+
 module.exports = {
   query: (text, params) => pool.query(text, params),
   pool
