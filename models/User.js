@@ -3,8 +3,13 @@ const db = require('../config/database');
 
 class User {
   static async create(userData) {
-    const { username, email, password, role, firstName, lastName, dateOfBirth, grade, subject } = userData;
-    
+    const { username, email, password, role, firstName, lastName } = userData;
+
+    // Optional fields: convert empty strings to null so typed columns (e.g. DATE) accept them
+    const dateOfBirth = userData.dateOfBirth || null;
+    const grade = userData.grade || null;
+    const subject = userData.subject || null;
+
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
