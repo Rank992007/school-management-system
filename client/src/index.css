@@ -319,9 +319,11 @@ tr:hover {
   color: #667eea;
 }
 
-.logo-link i {
-  font-size: 2rem;
-  color: #667eea;
+.logo-link img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .header-nav {

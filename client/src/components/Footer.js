@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-section">
           <h3>School Management System</h3>
-          <p>A comprehensive platform for managing educational institutions, students, teachers, and academic records.</p>
+          <p>Keep student marks, grades, attendance, and academic reports organized in one place.</p>
         </div>
         <div className="footer-section">
           <h3>Quick Links</h3>
@@ -20,7 +20,7 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Contact Info</h3>
           <ul>
-            <li><i className='bx bx-envelope'></i> info@schoolmanagement.com</li>
+            <li><i className='bx bx-envelope'></i> cyizihizaintimerank@gmail.com</li>
             <li><i className='bx bx-phone'></i> +250 794421597</li>
             <li><i className='bx bx-map'></i> 123 Education Street, Learning City</li>
           </ul>

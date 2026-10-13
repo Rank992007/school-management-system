@@ -43,7 +43,28 @@ const sendVerificationCode = async (email, code) => {
   }
 };
 
+const sendContactMessage = async ({ name, email, subject, message }) => {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+    throw new Error('Email sender credentials are not configured');
+  }
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: process.env.CONTACT_EMAIL || 'cyizihizaintimerank@gmail.com',
+    replyTo: email,
+    subject: 'New school website contact message',
+    text: [
+      `From: ${name}`,
+      `Email: ${email}`,
+      `Subject: ${subject}`,
+      '',
+      message
+    ].join('\n')
+  });
+};
+
 module.exports = {
   generateVerificationCode,
-  sendVerificationCode
+  sendVerificationCode,
+  sendContactMessage
 };

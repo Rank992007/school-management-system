@@ -6,11 +6,11 @@ const Home = ({ user }) => {
     <div className="home-page">
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Welcome to School Management System</h1>
-          <p>A comprehensive platform for managing educational institutions, students, teachers, and academic records.</p>
+          <h1>Every School Mark, Clearly Organized</h1>
+          <p>Keep student marks, grades, attendance, and academic reports together in one easy-to-use school information system.</p>
           <div className="hero-buttons">
             {!user ? (
-              <Link to="/" className="btn btn-primary">Get Started</Link>
+              <Link to="/login" className="btn btn-primary">Get Started</Link>
             ) : (
               <Link to={`/${user.role}-dashboard`} className="btn btn-primary">Go to Dashboard</Link>
             )}
@@ -24,28 +24,28 @@ const Home = ({ user }) => {
         <div className="features-grid">
           <div className="feature-card">
             <i className='bx bx-user'></i>
-            <h3>Student Management</h3>
-            <p>Track student information, grades, attendance, and academic progress efficiently.</p>
+            <h3>Student Information</h3>
+            <p>Keep student profiles, class details, attendance, and academic progress organized.</p>
           </div>
           <div className="feature-card">
             <i className='bx bx-chalkboard'></i>
-            <h3>Teacher Portal</h3>
-            <p>Empower teachers with tools for managing classes, assigning marks, and generating reports.</p>
+            <h3>Marks and Grades</h3>
+            <p>Teachers can record and update marks so students can follow their results by subject.</p>
           </div>
           <div className="feature-card">
             <i className='bx bx-book'></i>
-            <h3>Grade Tracking</h3>
-            <p>Comprehensive grade book system with detailed mark tracking and analysis.</p>
+            <h3>Academic Reports</h3>
+            <p>Review subject results and generated bulletins to understand academic performance.</p>
           </div>
           <div className="feature-card">
             <i className='bx bx-file'></i>
-            <h3>Report Generation</h3>
-            <p>Generate detailed bulletins and reports for students and parents.</p>
+            <h3>Student Mark Claims</h3>
+            <p>Submit a question about a mark and follow its review through the system.</p>
           </div>
           <div className="feature-card">
             <i className='bx bx-error'></i>
-            <h3>Claims System</h3>
-            <p>Allow students to submit grade disputes and track resolution progress.</p>
+            <h3>School Information</h3>
+            <p>Students and teachers can find the academic information relevant to their role.</p>
           </div>
           <div className="feature-card">
             <i className='bx bx-shield'></i>
@@ -57,10 +57,10 @@ const Home = ({ user }) => {
 
       <section className="cta-section">
         <div className="cta-content">
-          <h2>Ready to Transform Your School Management?</h2>
-          <p>Join thousands of educational institutions already using our platform.</p>
+          <h2>Keep Learning Progress in View</h2>
+          <p>Sign in to review marks, academic reports, and important student information.</p>
           {!user ? (
-            <Link to="/" className="btn btn-primary btn-large">Start Free Trial</Link>
+          <Link to="/login" className="btn btn-primary btn-large">Login to Get Started</Link>
           ) : (
             <Link to={`/${user.role}-dashboard`} className="btn btn-primary btn-large">Access Your Dashboard</Link>
           )}

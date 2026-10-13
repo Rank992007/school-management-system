@@ -13,8 +13,8 @@ router.post('/register', [
   body('email').isEmail().normalizeEmail().withMessage('Please provide a valid email'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   body('role').isIn(['student', 'teacher', 'admin']).withMessage('Invalid role'),
-  body('firstName').trim().notEmpty().withMessage('First name is required'),
-  body('lastName').trim().notEmpty().withMessage('Last name is required')
+  body('firstName').if((value, { req }) => req.body.role !== 'admin').trim().notEmpty().withMessage('First name is required'),
+  body('lastName').if((value, { req }) => req.body.role !== 'admin').trim().notEmpty().withMessage('Last name is required')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -38,8 +38,8 @@ router.post('/register', [
       email,
       password,
       role,
-      firstName,
-      lastName,
+      firstName: role === 'admin' ? 'Admin' : firstName,
+      lastName: role === 'admin' ? username : lastName,
       dateOfBirth,
       grade,
       subject

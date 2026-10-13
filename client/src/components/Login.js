@@ -13,7 +13,6 @@ const Login = ({ setUser }) => {
     firstName: '',
     lastName: '',
     dateOfBirth: '',
-    grade: '',
     subject: '',
     verificationCode: ''
   });
@@ -37,7 +36,18 @@ const Login = ({ setUser }) => {
       const url = isLogin ? '/api/auth/login' : '/api/auth/register';
       const payload = isLogin
         ? { username: formData.username, password: formData.password }
-        : { ...formData, role: selectedRole };
+        : {
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+            role: selectedRole,
+            ...(selectedRole !== 'admin' && {
+              firstName: formData.firstName,
+              lastName: formData.lastName
+            }),
+            ...(selectedRole === 'student' && { dateOfBirth: formData.dateOfBirth }),
+            ...(selectedRole === 'teacher' && { subject: formData.subject })
+          };
 
       const response = await fetch(url, {
         method: 'POST',
@@ -64,7 +74,9 @@ const Login = ({ setUser }) => {
         setError(data.message || 'Something went wrong');
       }
     } catch (error) {
-      setError('Network error. Please try again.');
+      setError(isLogin
+        ? 'Cannot reach the login server. Start the backend with "npm start" and try again.'
+        : 'Cannot reach the registration server. Start the backend with "npm start" and try again.');
     } finally {
       setLoading(false);
     }
@@ -271,7 +283,7 @@ const Login = ({ setUser }) => {
             />
           </div>
 
-          {!isLogin && (
+          {!isLogin && selectedRole !== 'admin' && (
             <>
               <div className="form-group">
                 <label>First Name</label>
@@ -308,17 +320,6 @@ const Login = ({ setUser }) => {
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label>Grade</label>
-                    <input
-                      type="text"
-                      name="grade"
-                      value={formData.grade}
-                      onChange={handleChange}
-                      placeholder="e.g., 10th Grade"
-                      required
-                    />
-                  </div>
                 </>
               )}
 

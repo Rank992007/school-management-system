@@ -60,8 +60,12 @@ A complete full-stack school management system built with Node.js/Express backen
    DATABASE_URL=postgresql://username:password@host:5432/database_name?sslmode=require
    JWT_SECRET=your_jwt_secret_key_here_change_in_production
    NODE_ENV=development
+   EMAIL_USER=your-gmail-address@gmail.com
+   EMAIL_PASSWORD=your-gmail-app-password
+   CONTACT_EMAIL=cyizihizaintimerank@gmail.com
    ```
    Replace `DATABASE_URL` with your Neon DB connection string.
+   To send contact form messages and account verification emails, set `EMAIL_USER` to a Gmail account and `EMAIL_PASSWORD` to its Google App Password (not the normal account password). Contact messages are sent to `CONTACT_EMAIL`.
 
 5. Set up the database schema:
    ```bash
@@ -152,7 +156,7 @@ A complete full-stack school management system built with Node.js/Express backen
 ## Usage
 
 1. Start both backend and frontend servers
-2. Open browser to `http://localhost:3000`
+2. Open browser to `http://localhost:3000`; use the Login link in the top-right navigation to sign in.
 3. Register as a student or teacher
 4. Login and access the appropriate dashboard
 

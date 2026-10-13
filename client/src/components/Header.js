@@ -7,7 +7,7 @@ const Header = ({ user, logout }) => {
       <div className="header-container">
         <div className="header-logo">
           <Link to="/" className="logo-link">
-            <i className='bx bx-school'></i>
+            <img src="/logo.png" alt="School Management logo" />
             <span>School Management</span>
           </Link>
         </div>
@@ -22,7 +22,7 @@ const Header = ({ user, logout }) => {
             </>
           )}
           {!user && (
-            <Link to="/" className="nav-link login-btn">Login</Link>
+            <Link to="/login" className="nav-link login-btn">Login</Link>
           )}
         </nav>
       </div>

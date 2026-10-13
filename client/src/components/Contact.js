@@ -8,6 +8,8 @@ const Contact = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [sending, setSending] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -16,12 +18,31 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setError('');
+    setSending(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        const validationError = result.errors && result.errors[0] && result.errors[0].msg;
+        throw new Error(validationError || result.message || 'We could not send your message. Please try again.');
+      }
+
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setSubmitted(true);
+    } catch (requestError) {
+      setError(requestError.message || 'We could not send your message. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -36,7 +57,7 @@ const Contact = () => {
               <i className='bx bx-envelope'></i>
               <div>
                 <h3>Email</h3>
-                <p>info@schoolmanagement.com</p>
+                <p>cyizihizaintimerank@gmail.com</p>
               </div>
             </div>
             <div className="contact-item">
@@ -74,50 +95,61 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className="contact-form">
               <h2>Send us a message</h2>
               <div className="form-group">
-                <label>Name</label>
+                <label htmlFor="contact-name">Name</label>
                 <input
+                  id="contact-name"
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  maxLength="100"
                   placeholder="Your name"
                 />
               </div>
               <div className="form-group">
-                <label>Email</label>
+                <label htmlFor="contact-email">Email</label>
                 <input
+                  id="contact-email"
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  maxLength="254"
                   placeholder="your@email.com"
                 />
               </div>
               <div className="form-group">
-                <label>Subject</label>
+                <label htmlFor="contact-subject">Subject</label>
                 <input
+                  id="contact-subject"
                   type="text"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
                   required
+                  maxLength="150"
                   placeholder="How can we help?"
                 />
               </div>
               <div className="form-group">
-                <label>Message</label>
+                <label htmlFor="contact-message">Message</label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
                   rows="5"
+                  maxLength="5000"
                   placeholder="Your message..."
                 />
               </div>
-              <button type="submit" className="btn btn-primary">Send Message</button>
+              {error && <p className="error-message" role="alert">{error}</p>}
+              <button type="submit" className="btn btn-primary" disabled={sending}>
+                {sending ? 'Sending...' : 'Send Message'}
+              </button>
             </form>
           )}
         </div>

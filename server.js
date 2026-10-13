@@ -13,12 +13,13 @@ app.use(cors());
 app.use(express.json());
 
 // Database Connection
-db.pool.connect()
+db.pool.query('SELECT 1')
   .then(() => console.log('PostgreSQL (Neon) connected successfully'))
   .catch(err => console.error('PostgreSQL connection error:', err));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/contact', require('./routes/contact'));
 app.use('/api/students', require('./routes/students'));
 app.use('/api/teachers', require('./routes/teachers'));
 app.use('/api/marks', require('./routes/marks'));

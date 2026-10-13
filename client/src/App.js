@@ -62,7 +62,11 @@ function App() {
           <Routes>
             <Route 
               path="/" 
-              element={user ? <Home user={user} /> : <Login setUser={setUser} />} 
+              element={<Home user={user} />}
+            />
+            <Route
+              path="/login"
+              element={user ? <Navigate to={`/${user.role}-dashboard`} /> : <Login setUser={setUser} />}
             />
             <Route 
               path="/home" 
