@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
 
 dotenv.config();
 const db = require('./config/database');
@@ -26,8 +28,31 @@ app.use('/api/marks', require('./routes/marks'));
 app.use('/api/claims', require('./routes/claims'));
 app.use('/api/bulletins', require('./routes/bulletins'));
 
-app.get('/', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ message: 'School Management System API is running' });
+});
+
+app.use('/api', (req, res) => {
+  res.status(404).json({ message: 'API route not found' });
+});
+
+const clientBuildPath = path.join(__dirname, 'client', 'build');
+const clientIndexPath = path.join(clientBuildPath, 'index.html');
+
+app.use(express.static(clientBuildPath));
+
+app.get('*', (req, res, next) => {
+  if (fs.existsSync(clientIndexPath)) {
+    return res.sendFile(clientIndexPath, (error) => {
+      if (error) next(error);
+    });
+  }
+
+  if (req.path === '/') {
+    return res.json({ message: 'School Management System API is running' });
+  }
+
+  return res.status(404).send('Frontend build not found. Run npm run build first.');
 });
 
 app.listen(PORT, () => {

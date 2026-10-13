@@ -72,28 +72,24 @@ A complete full-stack school management system built with Node.js/Express backen
    node setup-database.js
    ```
 
-6. Start the backend server:
+6. Build the frontend and start the server:
    ```bash
+   npm run build
    npm start
    ```
-   For development with auto-restart:
+   Open `http://localhost:5000` to use the built website and API from the same server. After changing frontend source files, run `npm run build` again; the running server will serve the updated build without needing to restart.
+
+   For backend development with auto-restart:
    ```bash
    npm run dev
    ```
 
-### Frontend Setup
-1. Navigate to the client directory:
+### Frontend Development
+To work on the frontend with live reload, start the React development server in a second terminal:
    ```bash
-   cd client
+   npm run client
    ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the frontend development server:
-   ```bash
-   npm start
-   ```
+The development frontend runs at `http://localhost:3000` and proxies API requests to the backend on port 5000.
 
 ## API Endpoints
 
